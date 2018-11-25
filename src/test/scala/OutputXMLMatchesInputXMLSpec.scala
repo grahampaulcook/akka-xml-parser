@@ -31,6 +31,10 @@ class OutputXMLMatchesInputXMLSpec extends UnitSpec with BeforeAndAfterEach with
   val inputXmlWithSelfClosingElement  = "<Address><Line>Line 1</Line><Line>Line 2</Line><Line/><PostCode>Tf3 4NT</PostCode></Address>"
   //                                                                                    ^^^^^^^
 
+  val inputXmlWithBlankElement        = "<Address><Line>Line 1</Line><Line>Line 2</Line><Line></Line><PostCode>Tf3 4NT</PostCode></Address>"
+  //                                                                                    ^^^^^^^^^^^^^
+
+
   val f = fixtures
 
   def xpathValue(xmlElements: Set[XMLElement], xPath: Seq[String]): Option[String] = xmlElements.collectFirst { case XMLElement(`xPath`, _, Some(xpathValue)) => xpathValue }
@@ -63,6 +67,7 @@ class OutputXMLMatchesInputXMLSpec extends UnitSpec with BeforeAndAfterEach with
 
   "The output XML" should {
     "match the input XML" when {
+      "blank elements *** ARE *** present"            in parseAndCompare(inputXmlWithBlankElement)
       "self closing elements are *** NOT *** present" in parseAndCompare(inputXml)
       "self closing elements *** ARE *** present"     in parseAndCompare(inputXmlWithSelfClosingElement)
     }
